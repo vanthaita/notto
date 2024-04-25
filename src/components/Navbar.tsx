@@ -4,6 +4,7 @@ import { ThemeToggle } from './ThemeToggle'
 import { Button } from './ui/button'
 import {RegisterLink, LoginLink, LogoutLink} from "@kinde-oss/kinde-auth-nextjs/components";
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+import UserNav from './UserNav';
 const Navbar = async () => {
     const {isAuthenticated} = getKindeServerSession();
 
@@ -11,17 +12,15 @@ const Navbar = async () => {
         <nav className=' border-b bg-background h-[10vh] flex items-center'>
             <div className='container flex items-center justify-between'>
                 <Link href="/">
-                    <h1 className=' font-bold text-3xl'>Notto</h1>
+                    <h1 className=' font-bold text-3xl'>No<span className=' text-cyan-400'>tto</span></h1>
                 </Link>
                 <div className='flex items-center gap-x-5'>
                     <ThemeToggle />
 
                         {(await isAuthenticated()) ? 
                              (
-                                <LogoutLink>
-                                    Logout
-                                </LogoutLink>
-                            )
+                               <UserNav />
+                        )
                         : (
                             <div className=' flex items-center gap-x-5'>
                                 <LoginLink>
