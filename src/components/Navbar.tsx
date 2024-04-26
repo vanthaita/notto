@@ -6,7 +6,9 @@ import {RegisterLink, LoginLink, LogoutLink} from "@kinde-oss/kinde-auth-nextjs/
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import UserNav from './UserNav';
 const Navbar = async () => {
-    const {isAuthenticated} = getKindeServerSession();
+    const {isAuthenticated, getUser} = getKindeServerSession();
+    const user = await getUser();
+
 
     return (
         <nav className=' border-b bg-background h-[10vh] flex items-center'>
@@ -19,7 +21,11 @@ const Navbar = async () => {
 
                         {(await isAuthenticated()) ? 
                              (
-                               <UserNav />
+                               <UserNav 
+                                    name={`${user?.family_name} ${user?.given_name}` || ''}
+                                    email={user?.email || ''}
+                                    image={user?.picture || ''}
+                               />
                         )
                         : (
                             <div className=' flex items-center gap-x-5'>

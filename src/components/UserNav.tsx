@@ -29,19 +29,20 @@ export const navItems: NavItem[] = [
     icon: CreditCard
   }
 ];
-const UserNav = () => {
+const UserNav = ({name, email, image}: {name: string, email: string, image: string}) => {
   if (!Array.isArray(navItems) || navItems.length === 0) {
     return null; // or handle empty case gracefully
   }
 
+  
   return (
     <DropdownMenu>
         <DropdownMenuTrigger asChild>
              <Button variant="ghost" className=' relative h-10 w-10 rounded-full'>
                 <Avatar className=' h-10 w-10 rounded-full '>
-                    <AvatarImage src="https://github.com/shadcn.png" alt=""/>
+                    <AvatarImage src={image} alt=""/>
                     <AvatarFallback>
-                      Jane
+                      {name}
                     </AvatarFallback>
                 </Avatar>
              </Button>
@@ -49,8 +50,8 @@ const UserNav = () => {
         <DropdownMenuContent className=' w-50' align='end' forceMount>
           <DropdownMenuLabel>
              <div className=' flex flex-col space-y-1'>
-                <p className=' text-sm font-medium leading-none'>Jan Marshal</p>
-                <p className=' text-sm leading-none text-muted-foreground'>gdadam@gm.com</p>
+                <p className=' text-sm font-medium leading-none'>{name}</p>
+                <p className=' text-sm leading-none text-muted-foreground'>{email}</p>
              </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
