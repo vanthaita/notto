@@ -1,5 +1,6 @@
 import DashBoardNav from "@/components/DashBoardNav";
 import prisma from "@/lib/db";
+import { stripe } from "@/lib/stripe";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
 
@@ -26,6 +27,20 @@ async function getData({email, id, firstName, lastName, profileImage} :
             }
         });
 
+    }
+    if(!user?.stripeCustomerId) {
+        const data = await stripe.customers.create({
+            email: email
+        });
+
+        await prisma.user.update({
+            where: {
+                id: id
+            },
+            data: {
+                stripeCustomerId: data.id
+            }
+        });
     }
 }   
 export default async function DashBoardLayout({children} : {children: React.ReactNode}) {
