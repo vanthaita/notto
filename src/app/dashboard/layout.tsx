@@ -8,6 +8,10 @@ async function getData({email, id, firstName, lastName, profileImage} :
     {email: string, id: string, firstName: string | undefined | null, lastName: string | undefined | null, profileImage: string | undefined | null
     }
 ) {
+    if (!id) {
+        // If id is undefined, return early or handle the error as needed
+        return;
+    }
     const user = await prisma.user.findUnique({
         where: {
             id: id
@@ -17,6 +21,7 @@ async function getData({email, id, firstName, lastName, profileImage} :
             stripeCustomerId: true
         }
     })
+
     if(!user) {
         const name = `${firstName ?? ""} ${lastName ?? ""}`
         await prisma.user.create({
@@ -44,7 +49,7 @@ async function getData({email, id, firstName, lastName, profileImage} :
     }
 }   
 export default async function DashBoardLayout({children} : {children: React.ReactNode}) {
-    const {getUser} = getKindeServerSession();
+    const { getUser } = getKindeServerSession();
     const user = await getUser();
 
     await getData({
