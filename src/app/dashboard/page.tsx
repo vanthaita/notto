@@ -4,19 +4,34 @@ import { Card } from '@/components/ui/card'
 import prisma from '@/lib/db'
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { Edit, File } from 'lucide-react'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, unstable_noStore as noStore } from 'next/cache'
+
 import Link from 'next/link'
 import React from 'react'
 
 async function getData(userId: string) {
-  const data = await prisma.note.findMany({
-    where: {
-      userId: userId
-    },
-    orderBy: {
-      createdAt: 'desc'
-    },
+  // const data = await prisma.note.findMany({
+  //   where: {
+  //     userId: userId
+  //   },
+  //   orderBy: {
+  //     createdAt: 'desc'
+  //   },
 
+  // })
+  noStore();
+  const data = await prisma.user.findUnique({
+    where: {
+      id: userId
+    },
+    select: {
+      Notes: true,
+      Subscription: {
+        select: {
+          status: true
+        }
+      }
+    }
   })
   return data;
 }
@@ -47,14 +62,22 @@ const page = async () => {
           </h1>
           <p className=' text-lg text-muted-foreground'>Here you can see and create new notes</p>
         </div>
-        <Button asChild>
+        {data?.Subscription?.status === 'active' ? (
+          <Button asChild>
           <Link href="/dashboard/new">
             Create New Note
           </Link>
         </Button>
+        ) : (
+          <Button asChild>
+            <Link href="/dashboard/billing">
+              Create New Note
+            </Link>
+           </Button>
+        )}
       </div>
 
-      {data.length < 1 ? (
+      {data?.Notes.length == 0 ? (
         <div className=' flex min-h-[400px] flex-col items-center justify-center rounded-md border border-dashed p-8 text-center animate-in fade-in-50'>
           <div className='flex h-20 w-20 items-center justify-center rounded-full bg-primary/10'>
             <File className=' w-10 h-10 text-primary'/>
@@ -64,15 +87,23 @@ const page = async () => {
             You currently dont have any notes. please create some so that you 
             can see them right here.
           </p>
+          {data?.Subscription?.status === 'active' ? (
           <Button asChild>
-            <Link href="/dashboard/new">
+          <Link href="/dashboard/new">
+            Create New Note
+          </Link>
+        </Button>
+        ) : (
+          <Button asChild>
+            <Link href="/dashboard/billing">
               Create New Note
             </Link>
-          </Button>
+           </Button>
+        )}
         </div>
       ) : (
         <div className=' flex flex-col gap-y-4'>
-          {data.map((item) => (
+          {data?.Notes.map((item) => (
             <Card key={item.id} className=' flex items-center justify-between p-4'>
               <div>
                 <h2 className=' font-semibold text-xl text-primary'>{item.title}</h2>

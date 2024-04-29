@@ -6,6 +6,7 @@ import { getStripeSession, stripe } from '@/lib/stripe';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import {  CheckCircle2 } from 'lucide-react'
 import { redirect } from 'next/navigation';
+import { revalidatePath, unstable_noStore as noStore } from 'next/cache'
 import React from 'react'
 
 const featureItems = [
@@ -16,6 +17,7 @@ const featureItems = [
     { name: 'Collaboration with team members' },
 ];
 async function getData(userId: string) {
+    noStore();
     const data = await prisma.subscription.findUnique({
         where: {
             userId: userId,

@@ -7,10 +7,11 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectItem, SelectTrigger,SelectContent, SelectLabel, SelectValue, SelectGroup } from '@/components/ui/select'
 import prisma from '@/lib/db'
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, unstable_noStore as noStore } from 'next/cache'
 import React from 'react'
 
 async function getData(userId: string) {
+  noStore();
   const data = await prisma.user.findUnique({
     where: {
       id: userId 

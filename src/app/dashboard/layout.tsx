@@ -3,11 +3,13 @@ import prisma from "@/lib/db";
 import { stripe } from "@/lib/stripe";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
+import {  unstable_noStore as noStore } from 'next/cache'
 
 async function getData({email, id, firstName, lastName, profileImage} :
     {email: string, id: string, firstName: string | undefined | null, lastName: string | undefined | null, profileImage: string | undefined | null
     }
 ) {
+    noStore();
     if (!id) {
         // If id is undefined, return early or handle the error as needed
         return;
