@@ -77,5 +77,4 @@ const UserNav = ({name, email, image}: {name: string, email: string, image: stri
     </DropdownMenu>
   )
 }
-
 export default UserNav

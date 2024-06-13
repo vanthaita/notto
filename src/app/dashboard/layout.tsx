@@ -11,7 +11,6 @@ async function getData({email, id, firstName, lastName, profileImage} :
 ) {
     noStore();
     if (!id) {
-        // If id is undefined, return early or handle the error as needed
         return;
     }
     const user = await prisma.user.findUnique({

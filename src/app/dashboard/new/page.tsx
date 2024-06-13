@@ -33,8 +33,7 @@ export default async function NewNoteRoute() {
 
         return redirect('/dashboard');
     }
-
-
+    
     return (
         <Card>
             <form action={postData}>
@@ -53,9 +52,6 @@ export default async function NewNoteRoute() {
                         <Label>Description</Label>
                         <Textarea name="description" placeholder="Describe your note as you want" required/>
                     </div>
-
-
-
                 </CardContent>
                 <CardFooter className="flex justify-between">
                     <Button asChild variant="destructive">
